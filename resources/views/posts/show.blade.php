@@ -10,5 +10,6 @@
  <body>
      <h1>{{$post->title}}</h1>
      <p>{{$post->body}}</p>
+     <p>Category: {{$post->category ? $post->category->name : 'N/A'}} ({{$post->category ? $post->category->description : ''}})</p>
  </body> 
 </html>
