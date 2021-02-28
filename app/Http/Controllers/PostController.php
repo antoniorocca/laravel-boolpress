@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Tag;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -25,7 +26,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $tags = Tag::all();
+        return view('posts.create', compact('tags'));
     }
 
     /**
@@ -36,11 +38,15 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $post = new Post;
-        $post->title = request('title');
-        $post->body = request('body');
-        $post->save();
-        return redirect()->route('posts.index');
+        $validatedData = $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+            'tags' => 'exists:tags,id'
+        ]);
+        Post::create($validatedData);
+        $new_post = Post::orderBy('id', 'desc')->first();
+        $new_post->tags()->attach($request->tags);
+        return redirect()->route('posts.show', $new_post);
     }
 
     /**
@@ -62,7 +68,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.edit', compact('post'));
+        $tags = Tag::all();
+        return view('posts.edit', compact('post', 'tags'));
     }
 
     /**
@@ -74,8 +81,14 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $data = $request->all();
-        $post->update($data);
+        $validatedData = $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+            'tags' => 'exists:tags,id'
+        ]);
+
+        $post->update($validatedData);
+        $post->tags()->sync($request->tags);
         return redirect()->route('posts.index');
     }
 

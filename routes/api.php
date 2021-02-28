@@ -18,27 +18,7 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 }); */
 
-Route::get('posts', function () {
-    return response()->json([
-      'success' => true,
-      'data' => App\Post::all()
-    ], 200);
-});
-Route::get('articles', function () {
-    return response()->json([
-      'success' => true,
-      'data' => App\Article::all()
-    ], 200);
-});
-Route::get('categories', function () {
-    return response()->json([
-      'success' => true,
-      'data' => App\Category::all()
-    ], 200);
-});
-Route::get('tags', function () {
-    return response()->json([
-      'success' => true,
-      'data' => App\Tag::all()
-    ], 200);
-});
+Route::get('posts', 'API\PostController@index');
+Route::get('articles', 'API\PostController@article');
+Route::get('categories', 'API\PostController@category');
+Route::get('tags', 'API\PostController@tag');

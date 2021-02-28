@@ -11,14 +11,11 @@ class TagSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
-    {
-        $tags_list = config('tag');
-
-        foreach ($tags_list as $tag) {
+    public function run(Faker $faker)
+    {       
+        for ($i=0; $i < 15; $i++) { 
             $newTag = new Tag();
-            $newTag->name = $tag['name'];
-            $newTag->body = $tag['body'];
+            $newTag->name = $faker->word(7);
             $newTag->save();
         }
     }

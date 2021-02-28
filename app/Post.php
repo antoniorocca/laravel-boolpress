@@ -19,13 +19,20 @@ class Post extends Model
     }
     
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+
+
     /**
      * Get the user that owns the Post
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
-    {
-        return $this->belongsTo('App\User');
-    }
+    // public function user()
+    // {
+    //     return $this->belongsTo('App\User');
+    // }
 }
